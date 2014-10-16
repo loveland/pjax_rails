@@ -37,6 +37,13 @@ function fnPjax(selector, container, options) {
   })
 }
 
+function consistentHash(link) {
+  var eff = link.hash, idx = link.href.indexOf('#');
+  if (!eff && idx > -1)
+    eff = link.href.substring(idx);
+  return eff;
+}
+
 // Public: pjax on click handler
 //
 // Exported as $.pjax.click.
@@ -73,12 +80,11 @@ function handleClick(event, container, options) {
   if ( location.protocol !== link.protocol || location.hostname !== link.hostname )
     return
 
+
   // Ignore anchors on the same page
-  var effectiveHash = link.hash, idx = link.href.indexOf('#')
-  if (!effectiveHash && idx > -1)
-    effectiveHash = link.href.substring(idx)
-  if (effectiveHash && link.href.replace(effectiveHash, '') ===
-       location.href.replace(location.hash, ''))
+  var linkHash = consistentHash(link), locHash = consistentHash(location);
+  if (linkHash && link.href.replace(linkHash, '') ===
+       location.href.replace(locHash, ''))
     return
 
   // Ignore empty anchor "foo.html#"
