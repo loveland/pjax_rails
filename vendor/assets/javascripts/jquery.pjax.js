@@ -83,7 +83,7 @@ function handleClick(event, container, options) {
 
   // Ignore anchors on the same page
   var linkHash = consistentHash(link), locHash = consistentHash(location);
-  if (linkHash && link.href.replace(linkHash, '') ===
+  if (link.href.replace(linkHash, '') ===
        location.href.replace(locHash, ''))
     return
 
