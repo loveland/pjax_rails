@@ -84,8 +84,10 @@ function handleClick(event, container, options) {
   // Ignore anchors on the same page
   var linkHash = consistentHash(link), locHash = consistentHash(location);
   if (link.href.replace(linkHash, '') ===
-       location.href.replace(locHash, ''))
-    return
+       location.href.replace(locHash, '')) {
+    event.preventDefault();
+    return;
+  }
 
   // Ignore empty anchor "foo.html#"
   if (link.href === location.href + '#')
@@ -322,8 +324,8 @@ function pjax(options) {
       pjax.state.url = url.href
       window.history.replaceState(pjax.state, container.title, url.href)
 
-      var target = $(url.hash)
-      if (target.length) $(window).scrollTop(target.offset().top)
+      //var target = $(url.hash)
+      //if (target.length) $(window).scrollTop(target.offset().top)
     }
 
     fire('pjax:success', [data, status, xhr, options])
@@ -650,7 +652,8 @@ function extractContainer(data, xhr, options) {
 
   // Prefer X-PJAX-URL header if it was set, otherwise fallback to
   // using the original requested url.
-  obj.url = stripPjaxParam(xhr.getResponseHeader('X-PJAX-URL') || options.requestUrl)
+  //obj.url = stripPjaxParam(xhr.getResponseHeader('X-PJAX-URL') || options.requestUrl)
+  obj.url = options.url;  // LS changed 3-9-15 to keep fragments. Who made you king of the location hash?
 
   // Attempt to parse response html into elements
   if (/<html/i.test(data)) {
