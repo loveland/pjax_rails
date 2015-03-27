@@ -447,7 +447,7 @@ function onPjaxPopstate(event) {
         cachePop(direction, pjax.state.id, container.clone().contents())
       }
 
-      var popstateEvent = $.Event('pjax:popstate', {
+      var popstateEvent = $.Event('pjax:popstate:start', {
         state: state,
         direction: direction
       })
@@ -479,6 +479,12 @@ function onPjaxPopstate(event) {
       } else {
         pjax(options)
       }
+
+      popstateEvent = $.Event('pjax:popstate:end', {
+        state: state,
+        direction: direction
+      })
+      container.trigger(popstateEvent)
 
       // Force reflow/relayout before the browser tries to restore the
       // scroll position.
